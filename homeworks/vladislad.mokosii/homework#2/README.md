@@ -4,7 +4,7 @@ TCP window size and the round trip latency you can calculate the maximum possibl
 
 Bandwidth-in-bits-per-second * Round-trip-latency-in-seconds = TCP window size in bits / 8 = TCP window size in bytes
 
-- Server IP - 192.168.0.101
+- Server IP - 52.42.37.206
 
 
 TCP window size = 1724 KB
