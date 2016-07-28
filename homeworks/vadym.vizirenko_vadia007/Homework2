@@ -1,0 +1,6 @@
+1. Window size is how much data sender can transmit before the receiver will send an acknowledgment. 
+Bandwidth-in-bits-per-second * Round-trip-latency-in-seconds = TCP window size in bits / 8 = TCP window size in bytes
+
+2. 52.59.37.52
+
+3. 1,000,000,000 bps * 0.095 seconds / 8 = 11875000 Bytes
