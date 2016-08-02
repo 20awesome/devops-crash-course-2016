@@ -1,0 +1,55 @@
+---
+- hosts: all
+  #accelerate: true
+  tasks:
+  - name: Creates directory 
+    file: path=/home/ubuntu/vlad_dir state=directory owner=ubuntu group=ubuntu mode=0700
+    ignore_errors: yes
+  - name: Creates directory 
+    file: path=/home/ubuntu/vlad_dir/touched state=touch mode=0700
+    ignore_errors: yes
+
+
+- hosts: group1
+  tasks:
+  - name: Creates directory 
+    file: path=/etc/init.d/touched state=touch mode=0700
+    become: true
+    become_user: root
+    ignore_errors: yes
+  - name : Clear history
+    shell: history -c
+    ignore_errors: yes
+- hosts: group2
+  tasks:
+  - name: Creates directory 
+    file: path=/var/lib/touched state=touch mode=0700
+    become: true
+    become_user: root
+    ignore_errors: yes
+  - name : Clear history
+    shell: history -c
+    ignore_errors: yes
+
+- hosts: group3
+  tasks:
+  - name: Creates directory 
+    file: path=/etc/touched state=touch mode=0700
+    become: true
+    become_user: root
+    ignore_errors: yes
+  - name : Clear history
+    shell: history -c
+    ignore_errors: yes
+
+
+- hosts: group4
+  tasks:
+  - name: Creates directory 
+    file: path=/var/touched state=touch mode=0700
+    become: true
+    become_user: root
+    ignore_errors: yes
+  - name : Clear history
+    shell: history -c
+    ignore_errors: yes
