@@ -1,0 +1,36 @@
+homework oveview
+IAM Essentials
+AWS S3 Essentials (for backups - iam role , for static files public acces to dir)
+
+
+Hands-On - Package Management (APT, dpkg)
+Command Line Syntax - ls
+Command Line Syntax - $PATH, Case Sensitivity
+Command Line Syntax - Basic Commands
+Command Line Syntax - uname
+Command Line Syntax - Command History, Command Completion
+Command Line Syntax - cd and pwd
+Shell Configuration Files
+Variables - Environment / System Variables
+Variables - User Defined
+Globbing
+Quoting
+The Linux File System
+Files, Directories
+Hidden Files and Directories
+Home
+Absolute and Relative Paths
+Files, Directories
+Archives, Compression
+Command Line Pipes
+I/O Redirection
+Kernel
+Processes
+syslog, dmesg
+/lib, /usr/lib, /etc, /var/log
+Internet, Network, Routers
+Domain Name Service and the Default Gateway (Network Router)
+Network Configuration
+Root and Standard Users
+System Users
+Symbolic Links
