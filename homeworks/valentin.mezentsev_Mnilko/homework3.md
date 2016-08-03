@@ -1,6 +1,6 @@
 #Block Access
-sudo chown -R root:root ~/vlad_dir/
-sudo chmod 0750 ~/vlad_dir/
+1. sudo chown -R root:root ~/vlad_dir/
+2. sudo chmod 0750 ~/vlad_dir/
 
 #File
 var/lib
