@@ -10,5 +10,5 @@
     files: a lot of and __/etc/touched__ . I think it is =)
     it located in __/etc__ folder, it contains Host-specific system-wide configuration files
 
-3. in pro
+3. [my image]: https://52.28.184.172/dev-ops-bucket/docker.png
 
