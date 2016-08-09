@@ -1,0 +1,45 @@
+Lection 05
+
+openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
+check https://www.sslshopper.com/csr-decoder.html
+
+
+self signed
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+Open a text editor (such as wordpad) and paste the entire body of each certificate into one text file in the following order:
+
+The Primary Certificate - your_domain_name.crt
+The Intermediate Certificate - DigiCertCA.crt
+The Root Certificate - TrustedRoot.crt
+Make sure to include the beginning and end tags on each certificate. The result should look like this:
+
+-----BEGIN CERTIFICATE----- 
+(Your Primary SSL certificate: your_domain_name.crt) 
+-----END CERTIFICATE----- 
+
+
+-----BEGIN CERTIFICATE----- 
+(Your Intermediate certificate: DigiCertCA.crt) 
+-----END CERTIFICATE----- 
+
+
+-----BEGIN CERTIFICATE----- 
+(Your Root certificate: TrustedRoot.crt) 
+-----END CERTIFICATE-----
+
+
+https://www.linode.com/docs/websites/nginx/how-to-configure-nginx
+
+
+
+https://youtu.be/PivpCKEiQOQ
+https://hub.docker.com
+
+
+https://docs.docker.com/docker-for-mac/
+
+lsb_release -a
+https://docs.docker.com/engine/installation/linux/ubuntulinux/
+
+
