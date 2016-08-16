@@ -1,0 +1,159 @@
+222docker engine -docker daemon
+docker images
+docker containers
+registry
+repository
+
+скачать имейдж которого нет
+
+docker run -it ubuntu /bin/bash
+(скачает последнюю ubuntu ) ubuntu:версия
+из докер хаб
+
+
+docker pull -a ubuntu
+скачать все образы
+docker images ubuntu
+покажет версии убунты
+
+оффицальное место откуда скачивается докер ето hub.docker.com
+есть репозитории для всех основных дистрибутивов
+
+https://registry.hub.docker.com/
+оф репозиторий
+make shure you trust container
+
+
+касательно docker image
+у нас в составе docker image находится 3 типа image
+base image хранит rootfs (мнимальная os)
+
+допустим мы установили nginx - это уже следующий слой image
+3й уровень image  ето любые обновления
+
+каждый леер имеет свой уникальный uuid
+например у нас есть /etc/resolv.conf  на  базовом уровне
+и  /etc/resolv.conf на новом уровне обновления - новый победит
+наслоения работают благодаря union mounts
+обычный mount позволяет маунтить диски в определнные директории
+union mounts позволяет маунтить множество файловых систем поверх друг друга\
+
+kernel не грузится так мы его уже загрузили с родительской ос
+
+docker pull coreos/apache
+пока загружается образ мы видим наслоения разных images
+docker images --tree
+
+как перметсить контейнер с одного компьютера на 2й
+docker run ubuntu /bin/bash -c "echo 'cool'>/tmp/file"
+docker ps -a
+увидими последний инстанс докера
+docker commit id(1я колонка из пред вывода)  название
+создаст новый image
+опять запустим docker images  и увидим наш закомиченые образ
+docker history  название
+показывает историю издевательств над образом и сколько инфы записано поверх
+
+docker save -o /tmp/image.tar "название" сохранит наш  image
+docker load  -i /tmp/image.tar загрузит наш  image
+ 
+когда мы запускаем контейнер docker читает служебную информацию  билдит из лееров image для загрузки
+и у каждого контейнера свой write леер над всеми(1 на контейнер),предыдущие лееры могут шарится между images
+
+
+
+
+docker run -it ubuntu /bin/bash
+запускаем 
+сntrl +P+Q = detach
+docker ps  проверка
+docker stop id(1я строка docker ps)
+dosker ps  нет
+docker stop отправляет килл процесу с пидом 1 внутрь docker  контейнера
+
+docker ps -a
+docker start id
+docker attach id
+docker restart id 
+docker ps - увидит аптайм поменялся
+
+Dockerfile текстовая интсрукция как собрать докер image
+синтаксис
+
+
+#комментарий
+FROM ubuntu:15.04
+MAINTAINER 20awesome@gmail.com
+RUN   apt-get update && apt-get install -y apache2 \
+	  vim apache2-utils
+ENV var1=MOC var2=TEST
+VOLUME /var/www/html
+# чтобы в будущем удалить ето хранилище которое замаунченов в инстанс - docker rm -v id_container , без -v оставит файлы не тронутыми
+EXPOSE 80
+
+#ADD file.tar /
+#каждый ран создает новый леер
+
+#запустить команду
+CMD ["apache2ctl","-D","FOREGROUND"]
+
+перенос строки \
+и && чтобы сокращать размер  лееров
+CMD - запуск комманды происходит когда  докер контейнер стартует
+RUN - используется при билдинге образа
+все файлы которые лежат вместе с докерфайлом заинклудятся в билд
+
+
+
+
+имя образов бек аперкейса!
+
+docker build -t hello-world2 .
+
+
+docker run -d -p 80:80 hello-world2
+
+docker run -v /tmp/mozilla/:/var/www/html -d -p 80:80 hello-world2
+docker run --volumes-from fe27838bc649 -p 81:80 hello-world2
+
+This tells docker to use the specified host path specifically, instead of creating one itself within the docker root, and mount that to the specified path within the container (/some/path above). Note, that this can also be a file instead of a directory. This is commonly referred to as a bind-mount within docker terminology (though technically speaking, all volumes are bind-mounts in the sense of what is actually happening). If the path on the host does not exist, a directory will be automatically be created at the given path.
+
+
+
+
+https://github.com/docker-library/postgres/blob/bfca9b8a92a99ccfc8f04933b7ecc29a108c7f49/9.0/Dockerfile
+
+дальше добавить репозиторий
+https://hub.docker.com/u/awesome8585/
+
+репозитории могу быть приватными или публичными
+
+vlad@vlad-HP-EliteBook-8440p:~/PluralSight Docker Deep Dive$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+hello-world         0.1                 091c9c27fffd        3 days ago          152.4 MB
+чтобі запушить нужно сделать tag
+
+docker tag 091c9c27fffd awesome8585/fortest
+
+docker push awesome8585/fortest
+
+
+The push refers to a repository [awesome8585/fortest] (len: 1)
+091c9c27fffd: Image already exists  <- докер был на базе убунты и репозитори й знает етот леер
+21cb2572e6f6: Image successfully pushed 
+
+
+давайте почистим систему,чтобы удалить image нада удалить контайнеры который используют данный имейдж
+
+docker ps -a
+docker rm id
+
+и потом docker rmi  ubuntu
+
+или можно сделать docker rmi -f ubuntu если не хотите удалить контейнері
+docker pull awesome8585/fortest
+
+docker run  -d -p 5000:5000 registry
+
+
+build cache - проверка на существование перед созданием нового леера
