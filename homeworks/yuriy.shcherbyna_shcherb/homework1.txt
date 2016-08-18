@@ -1,0 +1,8 @@
+Public DNS
+ec2-52-59-61-154.eu-central-1.compute.amazonaws.com
+	
+Public IP
+52.59.61.154
+
+Nginx is already installed
+Doker is already installed
