@@ -1,9 +1,9 @@
 - name: Add user
-  user: name={{ item.user }} shell={{ item.shell }} groups=sudo
+  user: name={{ item.user }} shell={{ item.shell }} group=sudo
   with_items:
-    - "{{SSH_USER}}"
+    - "{{ssh_user}}"
 
 - name: Add User Key
   authorized_key: user={{ item.user }} key="{{item.key}}"
   with_items:
-    - "{{SSH_USER}}"
+    - "{{ssh_user}}"

@@ -1,5 +1,4 @@
 ---
 - hosts: dbservers
-  sudo: yes
   roles:
     - pgsql
