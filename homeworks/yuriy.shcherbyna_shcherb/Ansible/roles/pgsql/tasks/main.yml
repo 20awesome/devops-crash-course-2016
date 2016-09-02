@@ -1,0 +1,66 @@
+---
+- name: apt update
+  apt: update_cache=yes cache_valid_time=3600
+ 
+# ключ официального apt-репозитория проекта postgresql
+- name: add apt key
+  apt_key: url=http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc state=present
+
+# добавляем репозиторий, адрес формируется на основе имени релиза установленной ОС
+- name: add apt repo
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ {{ansible_lsb.codename}}-pgdg main'
+
+# устанавливаем пакет с ключём
+- name: install pgdg-key
+  become: true
+  apt: pkg=pgdg-keyring state=latest
+
+# устанавливаем пакеты 
+- name: install packages
+  become: true
+  apt: pkg=$item state=latest
+  with_items:
+    - postgresql
+    - python-software-properties
+    - libpq-dev
+    - python-psycopg2
+
+# создаём пользователя для работы c db 
+# сгенерированный пароль будет сохранён в credentials/имя_хоста/postgres/имя_пользователя
+- name: create postresql user for some app
+  # выполняем с правами пользователя postgres (создаётся при установке postgresql)
+  become: true
+  become_user: postgres 
+  postgresql_user:
+    user="{{db_user}}"
+    password="{{db_password}}"
+    role_attr_flags=LOGIN
+
+# создаём базу данных 
+- name: create db
+  become: true 
+  become_user: postgres
+  action: postgresql_db name={{db_name}} owner={{db_user}} encoding='UTF8' lc_collate='en_US.UTF-8' lc_ctype='en_US.UTF-8' template='template0' state=present
+
+# добавляем в pg_hba.conf строчку, описываюшую разрешение подключение с любого ip-адреса для ранее созданной базы и пользователя
+- name: add entry to pg_hba.conf
+  lineinfile:
+    dest=/etc/postgresql/9.5/main/pg_hba.conf
+    regexp='host {{db_name}} {{db_user}} all md5'
+    line='host {{db_name}} {{db_user}} all md5' state=present
+# если файл изменился, то вызовем задачу по перечитыванию конфига postgresql
+  notify:
+    - reload postgres
+
+# по умолчанию postgresql слушает только localhost
+# изменяем соответствующий параметр в postgresql.conf
+- name: add entry to postgresql
+  lineinfile:
+    dest=/etc/postgresql/9.5/main/postgresql.conf
+    regexp='^listen_addresses'
+    line="listen_addresses = '*'"
+    state=present
+# если файл изменился, то вызовем задачу по перезапуску postgresql, т.к.
+  notify:
+    - restart postgres
+
