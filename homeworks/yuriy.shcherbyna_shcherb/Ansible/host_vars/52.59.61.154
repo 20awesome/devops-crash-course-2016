@@ -1,0 +1,10 @@
+ansible_user: ubuntu
+ansible_ssh_private_key_file: ./host_vars/files/devops-course-key-07-17.pem
+ansible_become: true
+ssh_user:
+  - user: yuriy
+    key: "{{ lookup('file', './host_vars/files/yuriy_key.pem') }}"
+    shell: '/bin/bash'
+db_name: test
+db_user: test_user
+db_password: password
